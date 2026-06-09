@@ -1,12 +1,40 @@
-
 <!DOCTYPE html>
-<html>
+<html lang="th">
 <head>
-<meta charset='UTF-8'>
-<title>Game</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pokémon Vocab Game</title>
+<style>
+body {font-family: sans-serif;background:#fef3c7;text-align:center;}
+h1 {color:#d97706;}
+button {font-size:22px;padding:12px;margin:5px;border-radius:10px;}
+.word-box {font-size:30px;margin:20px;letter-spacing:10px;}
+img {width:250px;height:180px;object-fit:cover;border-radius:10px;}
+</style>
 </head>
 <body>
-<h1>Vocabulary Game</h1>
-<script src='app.js'></script>
+<h1>⚡ Pokémon Vocab Game ⚡</h1>
+<div id="menu">
+<button onclick="startGame('food')">🍔 food</button>
+<button onclick="startGame('animals')">🦁 animals</button>
+<button onclick="startGame('vehicles')">🚗 vehicles</button>
+</div>
+<div id="game" style="display:none">
+<img id="img">
+<div id="hint"></div>
+<div class="word-box" id="word"></div>
+<div id="keys"></div>
+<button onclick="check()">✅ Check</button>
+</div>
+<script>
+const categories={food:["apple","banana","burger","pizza","rice","cake"],animals:["cat","dog","lion","tiger","elephant"],vehicles:["car","bus","train","plane","ship"]};
+function expand100(list){let r=[...list];let i=0;while(r.length<100){r.push(list[i%list.length]+(i+1));i++;}return r;}
+Object.keys(categories).forEach(c=>categories[c]=expand100(categories[c]));
+let words=[],current="",answer="",filled="";
+function startGame(cat){document.getElementById("menu").style.display="none";document.getElementById("game").style.display="block";words=categories[cat].sort(()=>Math.random()-0.5);next();}
+function next(){current=words.pop();answer=current.toUpperCase();document.getElementById("img").src="https://source.unsplash.com/400x300/?"+current;document.getElementById("hint").innerText=current;let show=answer.split("").map((c,i)=>i==1?"_":c).join(" ");document.getElementById("word").innerText=show;let keys="";answer.split("").forEach(l=>keys+=`<button onclick="fill('${l}')">${l}</button>`);document.getElementById("keys").innerHTML=keys;filled="";}
+function fill(l){filled=l;}
+function check(){if(filled===answer[1]){alert("✅ Correct!");}else{alert("❌ Wrong");}next();}
+</script>
 </body>
 </html>
